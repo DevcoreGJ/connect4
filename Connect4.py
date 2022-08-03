@@ -20,31 +20,30 @@ class Board():
 
 	# print the slots of the board game
 		for r in range (BOARD_ROWS):
-			print('|', end="")
+			print('|',end=" ")
 			for c in range(BOARD_COLS):
 				print(f" {self.board[r][c]} |", end="") # prints the entire board
 			print("\n")
-				
-			print(f"{'-' * 42}\n") #prints 30 - next to each other ???
+			print(f"{'-'*30}\n") #prints 30 - next to each other ???
 	
 	def which_turn(self):
 		players = ['X', 'O']
 		return players[self.turns % 2]
 
-	def turn(self, column):
-		# search from the bottom up
-		for r in range(BOARD+_ROWS-1, -1, -1):
-			if self.board[r][column] == ' ':
-				self.board[r][column] = self.which_turn()
-				self.last_move = [r, column]
-
-				self.turns += 1
-				return True
-
 	def in_bounds(self, r, c):
 		return (r >= 0 and r < BOARD_ROWS and c >= 0 and c < BOARD_COLS)
+
+	def turn(self, column):
+		# search from the bottom up
+		for i in range(BOARD_ROWS-1, -1, -1):
+			if self.board[i][column] == ' ':
+				self.board[i][column] = self.which_turn()
+				self.last_move = [i, column]
+				
+				self.turns += 1
+				return True
 			
-		return False
+		#return False
 
 	def check_winner(self):
 		last_row = self.last_move[0]
@@ -78,7 +77,7 @@ class Board():
 		for i in range(0, 7, 2):
 			if(directions[i][1] + directions[i+1][1] >= 3):
 				self.print_board()
-				print(f" {last_letter} is the winner!")
+				print(f"{last_letter} is the winner!")
 				return last_letter
 
 		# Did not find any winners
@@ -91,13 +90,12 @@ def play():
 	game_over = False
 	while not game_over:
 		game.print_board()
-
 		#ask user for input but only accepting valid
 		valid_move = False
 		while not valid_move:
 			user_move = input(f"{game.which_turn()}'s turn - pick a column (1-{BOARD_COLS}): ")
 			try:
-				valid_move = game.turn(int(user_move)-1)
+				valid_move = game.turn(int(user_move) - 1)
 			except:
 				print(f"Please choose a number between 1 and {BOARD_COLS}")
  
